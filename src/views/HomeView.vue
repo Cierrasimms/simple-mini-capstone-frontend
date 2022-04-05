@@ -15,7 +15,7 @@
     "
     <div v-for="product in products" v-bind:key="product.id">
       <h2>{{ product.name }}</h2>
-      <img v-bind:src="product.image_url" v-bind:alt="product.title" />
+      <img v-bind:src="product.image_url" v-bind:alt="product.title" style="max-width: 250px" />
       <p>{{ product.description }}</p>
 
       <p>Price: {{ product.price }}</p>
