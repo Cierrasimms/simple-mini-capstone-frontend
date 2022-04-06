@@ -3,13 +3,13 @@
     <h1>{{ message }} count: {{ products.length }}</h1>
     <h2>New Product</h2>
     Name
-    <input type="text" v-model="productName" />
+    <input type="text" v-model="newProduct.name" />
     Description
-    <input type="text" v-model="productDescription" />
+    <input type="text" v-model="newProduct.description" />
     Image Url
-    <input type="text" v-model="productImageUrl" />
+    <input type="text" v-model="newProduct.image_url" />
     Price
-    <input type="text" v-model="productPrice" />
+    <input type="text" v-model="newProduct.price" />
 
     <button v-on:click="createProduct()">Create</button>
     "
@@ -17,9 +17,18 @@
       <h2>{{ product.name }}</h2>
       <img v-bind:src="product.image_url" v-bind:alt="product.title" style="max-width: 250px" />
       <p>{{ product.description }}</p>
-
       <p>Price: {{ product.price }}</p>
+      <button v-on:click="showProduct(product)">More Info</button>
     </div>
+    <dialog id="product-details">
+      <form method="dialog">
+        <h1>Product Info</h1>
+        <p>Name: {{ currentProduct.title }}</p>
+        <p>Description: {{ currentProduct.description }}</p>
+        <p>Price: {{ currentProduct.price }}</p>
+        <button>Close</button>
+      </form>
+    </dialog>
   </div>
 </template>
 
@@ -30,10 +39,8 @@ export default {
     return {
       message: "Buy my things pls",
       products: [],
-      productName: "",
-      productDescription: "",
-      productImageUrl: "",
-      productPrice: 0,
+      newProduct: [],
+      currentProduct: {},
     };
   },
   created: function () {
@@ -47,20 +54,18 @@ export default {
       });
     },
     createProduct() {
-      var params = {
-        name: this.productName,
-        description: this.productDescription,
-        image_url: this.productImageUrl,
-        price: this.productPrice,
-      };
       axios
-        .post("http://localhost:3000/products", params)
+        .post("http://localhost:3000/products", this.newProduct)
         .then((response) => {
           this.products.push(response.data);
         })
         .catch((error) => {
           console.log(error.response);
         });
+    },
+    showProduct(product) {
+      this.currentProduct = product;
+      document.querySelector("#product-details").showModal();
     },
   },
 };
