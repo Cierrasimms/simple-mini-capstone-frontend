@@ -12,7 +12,7 @@
     <input type="text" v-model="newProduct.price" />
 
     <button v-on:click="createProduct()">Create</button>
-    "
+
     <div v-for="product in products" v-bind:key="product.id">
       <h2>{{ product.name }}</h2>
       <img v-bind:src="product.image_url" v-bind:alt="product.title" style="max-width: 250px" />
@@ -26,6 +26,20 @@
         <p>Name: {{ currentProduct.title }}</p>
         <p>Description: {{ currentProduct.description }}</p>
         <p>Price: {{ currentProduct.price }}</p>
+        <h1>Edit Product</h1>
+        <p>
+          Name
+          <input v-model="currentProduct.name" type="text" />
+        </p>
+        <p>
+          Description
+          <input v-model="currentProduct.description" type="text" />
+        </p>
+        <p>
+          Price
+          <input v-model="currentProduct.price" type="text" />
+        </p>
+        <button v-on:click="updateProduct()">Update</button>
         <button>Close</button>
       </form>
     </dialog>
@@ -39,7 +53,7 @@ export default {
     return {
       message: "Buy my things pls",
       products: [],
-      newProduct: [],
+      newProduct: {},
       currentProduct: {},
     };
   },
@@ -66,6 +80,11 @@ export default {
     showProduct(product) {
       this.currentProduct = product;
       document.querySelector("#product-details").showModal();
+    },
+    updateProduct() {
+      axios.patch(`http://localhost:3000/products/${this.currentProduct.id}`, this.currentProduct).then((response) => {
+        console.log("Success!", response);
+      });
     },
   },
 };
