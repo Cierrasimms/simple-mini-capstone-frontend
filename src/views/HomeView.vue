@@ -40,6 +40,7 @@
           <input v-model="currentProduct.price" type="text" />
         </p>
         <button v-on:click="updateProduct()">Update</button>
+        <button v-on:click="deleteProduct(currentProduct)">Delete</button>
         <button>Close</button>
       </form>
     </dialog>
@@ -84,6 +85,13 @@ export default {
     updateProduct() {
       axios.patch(`http://localhost:3000/products/${this.currentProduct.id}`, this.currentProduct).then((response) => {
         console.log("Success!", response);
+      });
+    },
+    deleteProduct(product) {
+      axios.delete(`http://localhost:3000/products/${product.id}`).then((response) => {
+        console.log(response);
+        var index = this.products.indexOf(product);
+        this.products.splice(index, 1);
       });
     },
   },
